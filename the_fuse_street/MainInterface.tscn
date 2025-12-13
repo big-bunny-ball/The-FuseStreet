@@ -1,0 +1,253 @@
+[gd_scene load_steps=7 format=3 uid="uid://rb7mlcqlored"]
+
+[ext_resource type="Script" uid="uid://dxmsb1bcs638n" path="res://Scripts/MainInterface.cs" id="1_83rwc"]
+[ext_resource type="PackedScene" uid="uid://dlcs7asqfodhe" path="res://ContentPreview.tscn" id="1_y1dj1"]
+[ext_resource type="Texture2D" uid="uid://p3keaftx51po" path="res://Misc/1.png" id="3_tr17e"]
+[ext_resource type="Texture2D" uid="uid://bqkfpnxvt2ksc" path="res://Misc/2.png" id="4_vscfo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3fv6l"]
+bg_color = Color(0.8089983, 0.8089983, 0.80899817, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1dj1"]
+bg_color = Color(0.39308554, 0.39308554, 0.39308533, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="Control" type="Control" node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "PlayButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_83rwc")
+UserDesTextEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/UserDesTextEdit")
+Culture1LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/Culture1LineEdit")
+PlayButton = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Button")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="LeftBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3fv6l")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleDes" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Description 描述"
+horizontal_alignment = 1
+
+[node name="UserDesTextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+placeholder_text = "You can describe what’s the culture, with any unique art style/designs/outfitting/architecture that would be helpful for generating the scene and game character.
+
+你可以描述一下文化背景，包括任何有助场景和游戏角色的创作的独特的艺术风格、设计、服饰或建筑。"
+wrap_mode = 1
+caret_blink = true
+
+[node name="TitleC1" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Culture 1 文化1"
+horizontal_alignment = 1
+
+[node name="Culture1LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleC2" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Culture 2 文化2"
+horizontal_alignment = 1
+
+[node name="Culture1LineEdit2" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "若不选择融合请保持空白"
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 90
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y1dj1")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "PLAY"
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Play/Pause
+开始/暂停"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="PanelContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1245, 696)
+render_target_update_mode = 4
+
+[node name="World" parent="PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_y1dj1")]
+
+[node name="BottomBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(1245, 200)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_3fv6l")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(141.185, 0)
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("3_tr17e")
+texture_pressed = ExtResource("4_vscfo")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 45
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Generation 生成"
+
+[node name="Label2" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Fusion 融合"
+
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 70
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 39
+alignment = 1
+
+[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Scene Reset 重置场景"
+
+[node name="Button2" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Snapshot 截屏"
+
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 95
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 90
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3"]
+layout_mode = 2
+theme_override_constants/separation = 19
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/VBoxContainer"]
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Arabic 阿拉伯风格"
+popup/item_1/id = 1
+popup/item_2/text = "Preset 2"
+popup/item_2/id = 2
+popup/item_3/text = "Preset 3"
+popup/item_3/id = 3
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/VBoxContainer/OptionButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -47.0
+offset_top = -11.5
+offset_right = 47.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Presets 预设"
+
+[node name="TextRequest" type="HTTPRequest" parent="."]
+
+[node name="ImageRequest" type="HTTPRequest" parent="."]

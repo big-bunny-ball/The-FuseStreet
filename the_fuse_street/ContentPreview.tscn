@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=3 uid="uid://dlcs7asqfodhe"]
+
+[ext_resource type="Texture2D" uid="uid://uxhe5t5ge0fe" path="res://Whitecards/backgroud_2.png" id="1_0f1at"]
+[ext_resource type="PackedScene" uid="uid://bsxywjyovx1lj" path="res://PrefabScenes/Player.tscn" id="1_cxb2h"]
+[ext_resource type="Texture2D" uid="uid://ckxc0btvg0lix" path="res://Whitecards/platform_2.png" id="2_ak03s"]
+[ext_resource type="PackedScene" uid="uid://cfl4i5yykiyr2" path="res://PrefabScenes/NPC.tscn" id="2_gm6oa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gm6oa"]
+size = Vector2(20, 919)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0o0ie"]
+size = Vector2(3182, 108)
+
+[node name="World" type="Node2D"]
+
+[node name="StaticBody2DBackgroud" type="StaticBody2D" parent="."]
+
+[node name="Background" type="TextureRect" parent="StaticBody2DBackgroud"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+offset_right = 2100.0
+offset_bottom = 870.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_0f1at")
+expand_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2DBackgroud"]
+position = Vector2(-102, 313.5)
+shape = SubResource("RectangleShape2D_gm6oa")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2DBackgroud"]
+position = Vector2(1525, 426)
+shape = SubResource("RectangleShape2D_gm6oa")
+
+[node name="Background2" type="TextureRect" parent="StaticBody2DBackgroud"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -158.0
+offset_right = 2100.0
+offset_bottom = 742.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_0f1at")
+expand_mode = 1
+
+[node name="StaticBody2DPlatform" type="StaticBody2D" parent="."]
+
+[node name="Platform" type="TextureRect" parent="StaticBody2DPlatform"]
+offset_left = -440.0
+offset_top = 740.0
+offset_right = 2650.0
+offset_bottom = 1108.0
+texture = ExtResource("2_ak03s")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2DPlatform"]
+position = Vector2(832, 794)
+shape = SubResource("RectangleShape2D_0o0ie")
+
+[node name="Player" parent="." instance=ExtResource("1_cxb2h")]
+position = Vector2(0, 740)
+TargetVisualHeight = 200.0
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+offset = Vector2(400, -270)
+
+[node name="NPC" parent="." instance=ExtResource("2_gm6oa")]
+position = Vector2(1236, 740)

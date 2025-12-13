@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bsxywjyovx1lj"]
+
+[ext_resource type="Script" uid="uid://c0evhg0pbn8uh" path="res://Scripts/Player.cs" id="1_mshtm"]
+[ext_resource type="Shader" uid="uid://c7scdbt7q5wvp" path="res://Scripts/PlayerShaderEdit.gdshader" id="2_305tu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_305tu"]
+size = Vector2(80, 202)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p8ekn"]
+shader = ExtResource("2_305tu")
+shader_parameter/key_color = Color(1, 1, 1, 1)
+shader_parameter/similarity = 0.4
+shader_parameter/smoothness = 0.1
+shader_parameter/max_bg_saturation = 0.12
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_mshtm")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(80, 150)
+offset_left = -40.0
+offset_top = -150.0
+offset_right = 40.0
+color = Color(0.54896295, 0.5489625, 0.5489627, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -101)
+shape = SubResource("RectangleShape2D_305tu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_p8ekn")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_p8ekn")
+offset = Vector2(0, -550)
