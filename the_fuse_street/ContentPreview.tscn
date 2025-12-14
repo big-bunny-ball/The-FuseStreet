@@ -32,7 +32,7 @@ position = Vector2(-102, 313.5)
 shape = SubResource("RectangleShape2D_gm6oa")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2DBackgroud"]
-position = Vector2(1525, 426)
+position = Vector2(1437, 422)
 shape = SubResource("RectangleShape2D_gm6oa")
 
 [node name="Background2" type="TextureRect" parent="StaticBody2DBackgroud"]

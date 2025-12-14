@@ -15,7 +15,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="Control" type="Control" node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "PlayButton")]
+[node name="Control" type="Control" node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "Culture2LineEdit", "PlayButton", "ToggleButton", "ResetButton", "ScreenshotButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,7 +25,11 @@ grow_vertical = 2
 script = ExtResource("1_83rwc")
 UserDesTextEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/UserDesTextEdit")
 Culture1LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/Culture1LineEdit")
+Culture2LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/Culture2LineEdit")
 PlayButton = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Button")
+ToggleButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/ToggleButton")
+ResetButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer/ResetButton")
+ScreenshotButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer/ScreenshotButton")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -87,7 +91,7 @@ theme_override_font_sizes/font_size = 30
 text = "Culture 2 文化2"
 horizontal_alignment = 1
 
-[node name="Culture1LineEdit2" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="Culture2LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "若不选择融合请保持空白"
 alignment = 1
@@ -161,7 +165,7 @@ theme_override_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="TextureButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+[node name="ToggleButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(141.185, 0)
 layout_mode = 2
 toggle_mode = true
@@ -201,12 +205,12 @@ layout_mode = 2
 theme_override_constants/separation = 39
 alignment = 1
 
-[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ResetButton" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Scene Reset 重置场景"
 
-[node name="Button2" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ScreenshotButton" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Snapshot 截屏"

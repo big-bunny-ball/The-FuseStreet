@@ -1,17 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://bsxywjyovx1lj"]
+[gd_scene load_steps=6 format=3 uid="uid://bsxywjyovx1lj"]
 
 [ext_resource type="Script" uid="uid://c0evhg0pbn8uh" path="res://Scripts/Player.cs" id="1_mshtm"]
-[ext_resource type="Shader" uid="uid://c7scdbt7q5wvp" path="res://Scripts/PlayerShaderEdit.gdshader" id="2_305tu"]
+[ext_resource type="Shader" uid="uid://cbi8ogcl6ytpf" path="res://Scripts/ShaderLatest.gdshader" id="2_305tu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_305tu"]
 size = Vector2(80, 202)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p8ekn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_305tu"]
 shader = ExtResource("2_305tu")
-shader_parameter/key_color = Color(1, 1, 1, 1)
-shader_parameter/similarity = 0.4
-shader_parameter/smoothness = 0.1
-shader_parameter/max_bg_saturation = 0.12
+shader_parameter/key_colour = Color(1, 1, 1, 1)
+shader_parameter/similarity = 0.2
+shader_parameter/smoothness = 0.03
+shader_parameter/edge_erosion = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p8ekn"]
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_mshtm")
@@ -28,7 +30,8 @@ position = Vector2(0, -101)
 shape = SubResource("RectangleShape2D_305tu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_p8ekn")
+material = SubResource("ShaderMaterial_305tu")
+position = Vector2(0, 20)
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
 visible = false
