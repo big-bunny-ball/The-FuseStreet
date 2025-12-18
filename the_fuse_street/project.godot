@@ -10,10 +10,16 @@ config_version=5
 
 [application]
 
-config/name="TheFuseStreet"
+config/name="The FuseStreet"
+config/description="The FuseStreet is a small, focused AI game design test‑fit tool that lives inside a simple 2D side‑view scene. Powered by Gemini 3 Pro and Nano Banana Pro, it lets you type in one culture (Generation) or two cultures (Fusion) + your scene description, then instantly re‑skin a whitecard street with a matching background, player character, NPC, and short dialogue. Designers can walk around the scene, talk to the NPC, and quickly feel whether a cultural concept and visual style fit their game—without commissioning concept art or writing full scripts.
+[ 融街 ] 是一款轻量且聚焦的 AI 游戏设计适配测试工具，运行在简洁的 2D 横版场景中。由 Gemini 3 Pro 与 Nano Banana Pro 双模型驱动，你只需输入场景描述 + 单一文化（生成模式）或两种文化（融合模式），即可瞬间将白模街道「换肤」为配套世界——自动生成匹配的背景、玩家角色、NPC 及简短对话。设计师可操控角色在场景中行走、与 NPC 对话，快速验证某个文化概念与视觉风格是否契合游戏——无需委托概念美术，也无需撰写完整脚本。"
+config/version="alpha-1.0"
 run/main_scene="uid://rb7mlcqlored"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
-config/icon="res://icon.svg"
+boot_splash/show_image=false
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+config/icon="uid://dwovsnktdhxt"
 
 [display]
 

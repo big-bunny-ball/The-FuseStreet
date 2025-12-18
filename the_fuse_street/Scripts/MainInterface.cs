@@ -1,7 +1,9 @@
 using System;
+using System.Drawing;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Godot;
+using Color = Godot.Color;
 
 namespace TheFuseStreet.Scripts;
 
@@ -14,8 +16,11 @@ public partial class MainInterface : Control
     // === ALL THESE BUTTONS NEED TO BE CHANGE TO TEXTUREBUTTON WHEN UI DESIGN IS FINALISED!
     [Export] public Button PlayButton;
     [Export] public TextureButton ToggleButton;
-    [Export] public Button ResetButton;
-    [Export] public Button ScreenshotButton;
+    [Export] public TextureButton ResetButton;
+    [Export] public TextureButton ScreenshotButton;
+
+    [Export] public TextureRect GenLabel;
+    [Export] public TextureRect FusLabel;
 
     // http req nodes
     private HttpRequest TextRequest;
@@ -24,22 +29,20 @@ public partial class MainInterface : Control
     // scene reference - find player, background, platform... in the sub-viewport
     private SubViewport SubViewport;
     
-    const String WorldNodePath = "PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport/World";
-
-
-    // openrouter api for current test
-    const String OpenRouterUrl = "https://openrouter.ai/api/v1/chat/completions";
-    
-    private const String SiteRefer = "https://fusestreet.app";
-    private const String TextModel = "google/gemini-3-pro-preview";
-    private const String ImageModel = "google/gemini-3-pro-image-preview";
-    private const String APIKey = "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";
+    public const String WorldNodePath = "PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport/World";
 
     // Track if subviewport has focus for input routing
     private bool subViewportFocused = false;
     private SubViewportContainer _subViewportContainer;
 
+    // Google Gemini API - Direct
+    public const String GeminiTextUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent"; // Text API
+    public const String GeminiImageUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent";  // Image API
 
+    private const String APIKey = "AIzaSyBKJksMXi5_iejYGy3Bgq4N_il4mSgS1AM"; // Google Cloud Console API Key
+   
+
+    // READT
     public override void _Ready()
     {
         TextRequest = GetNode<HttpRequest>("TextRequest");
@@ -56,6 +59,10 @@ public partial class MainInterface : Control
         Culture2LineEdit.FocusEntered += () => subViewportFocused = false;
 
         _subViewportContainer.GuiInput += OnSubViewportGuiInput;
+
+        ToggleButton.Toggled += OnToggleChanged;
+        FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
+
     }
 
 
@@ -64,6 +71,27 @@ public partial class MainInterface : Control
         // Update player input state based on focus
         var player = SubViewport.GetNode<Player>("World/Player");
         player.InputEnabled = subViewportFocused;
+    }
+
+
+    private void OnToggleChanged(bool isOn)
+    {
+        UpdateToggleLables();
+    }
+
+
+    private void UpdateToggleLables()
+    {
+        if (ToggleButton.ButtonPressed)
+        {
+            GenLabel.Modulate = new Color(1, 1, 1, 0.5f);
+            FusLabel.Modulate = new Color(1, 1, 1, 1.0f);
+        }
+        else
+        {
+            GenLabel.Modulate = new Color(1, 1, 1, 1.0f);
+            FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
+        }
     }
 
 
@@ -267,25 +295,38 @@ public partial class MainInterface : Control
         " The player output is a small side-view spritesheet on pure white, and the platform is a top-down seamless ground tile." +
         " Follow the system rules exactly and respond with JSON only.";
 
-
-        var requestBody = new OpenRouterRequest
+        // Google Gemini API Request
+        var requestBody = new
         {
-            model = TextModel,
-            messages =
-            [
-                new OpenRouterMessage { role = "system", content = systemPrompt },
-                new OpenRouterMessage { role = "user",   content = userPrompt   }
-            ]
+            system_instruction = new
+            {
+                parts = new[] { new { text = systemPrompt } }
+            },
+            contents = new[]
+            {
+                new
+                {
+                    role = "user",
+                    parts = new[] { new { text = userPrompt } }
+                }
+            },
+            generationConfig = new
+            {
+                response_mime_type = "application/json"
+            }
         };
 
-        String jsonResponse = await PostRequest(OpenRouterUrl, JsonSerializer.Serialize(requestBody));
+        String jsonResponse = await PostGeminiRequest(GeminiTextUrl, JsonSerializer.Serialize(requestBody));
+        
+        if (string.IsNullOrEmpty(jsonResponse)) return null;
 
         using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
         {
             string contentString = doc.RootElement
-                .GetProperty("choices")[0]
-                .GetProperty("message")
+                .GetProperty("candidates")[0]
                 .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
                 .GetString();
             
             
@@ -499,26 +540,38 @@ public partial class MainInterface : Control
             "The player output is a small side-view spritesheet on pure white, and the platform is a top-down seamless ground tile. " +
             "Follow the system rules exactly and respond with JSON only.";
 
-            var requestBody = new OpenRouterRequest
+            var requestBody = new
             {
-                model = TextModel,
-                messages =
-                [
-                    new OpenRouterMessage { role = "system", content = systemPrompt },
-                    new OpenRouterMessage { role = "user",   content = userPrompt   }
-                ]
+                system_instruction = new
+                {
+                    parts = new[] { new { text = systemPrompt } }
+                },
+                contents = new[]
+                {
+                    new
+                    {
+                        role = "user",
+                        parts = new[] { new { text = userPrompt } }
+                    }
+                },
+                generationConfig = new
+                {
+                    response_mime_type = "application/json"
+                }
             };
 
-            String jsonResponse = await PostRequest(OpenRouterUrl, JsonSerializer.Serialize(requestBody));
+            String jsonResponse = await PostGeminiRequest(GeminiTextUrl, JsonSerializer.Serialize(requestBody));
 
             if (string.IsNullOrEmpty(jsonResponse)) return null;
 
             using JsonDocument doc = JsonDocument.Parse(jsonResponse);
             string contentString = doc.RootElement
-                .GetProperty("choices")[0]
-                .GetProperty("message")
+                .GetProperty("candidates")[0]
                 .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
                 .GetString();
+
 
             if (string.IsNullOrWhiteSpace(contentString))
             {
@@ -536,6 +589,7 @@ public partial class MainInterface : Control
 
 
     // image generation
+    // image generation - Google Gemini API
     private async Task<Texture2D> GenerateTexture(String prompt, bool isCharacter, bool isPlatform)
     {
         if (isCharacter)
@@ -579,80 +633,107 @@ public partial class MainInterface : Control
                 "- 禁止：文字、边框、网格线、方框、标注";
         }
         
-        
-        // compute ratio directly
-        var ratio = isCharacter ? "16:9" : isPlatform ? "1:1" : "21:9";
+        // Aspect ratio for Gemini
+        var aspectRatio = isCharacter ? "16:9" : isPlatform ? "1:1" : "21:9";
 
-        // payload for nano banana
-        var reqBody = new
+        // Google Gemini 3 Pro Image API format
+        var requestBody = new
         {
-            model = ImageModel,
-            messages = new[]
+            contents = new[]
             {
-                new {role = "user", content = prompt}
+                new
+                {
+                    parts = new[] { new { text = prompt } }
+                }
             },
-            image_config = new
+            generationConfig = new
             {
-                aspect_ratio = ratio
+                response_modalities = new[] { "TEXT", "IMAGE" }
             }
         };
 
-        String jsonResponse = await PostRequest(OpenRouterUrl, JsonSerializer.Serialize(reqBody));
+        String jsonResponse = await PostGeminiRequest(GeminiImageUrl, JsonSerializer.Serialize(requestBody));
 
-        // safety check for request
         if (String.IsNullOrEmpty(jsonResponse))
         {
-            GD.PushError("image generation: API returned null.");
+            GD.PushError("Image generation: API returned null.");
             return null;
         }
 
-        // extract URL from JSON
+        // Parse response and extract base64 image
         using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
         {
-            // referring to OpenRouter's API documentation for image generation
-            var message = doc.RootElement.GetProperty("choices")[0].GetProperty("message");
-
-            // CRITICAL CHECK if "images" exist (safety filter causes it to disappear)
-            if (message.TryGetProperty("images", out JsonElement imagesArray))
+            var candidates = doc.RootElement.GetProperty("candidates");
+            if (candidates.GetArrayLength() == 0)
             {
-                // according to python reference: images[0] -> image_url -> url
-                String imageUrl = imagesArray[0]
-                    .GetProperty("image_url")
-                    .GetProperty("url")
-                    .GetString();
-                
-                // download image
-                return await DownloadImage(imageUrl);
+                GD.PushError("Image generation: No candidates returned.");
+                return null;
+            }
+
+            var parts = candidates[0].GetProperty("content").GetProperty("parts");
+            
+            // Look for inline_data (base64 image)
+            foreach (var part in parts.EnumerateArray())
+            {
+                if (part.TryGetProperty("inlineData", out JsonElement inlineData))
+                {
+                    string mimeType = inlineData.GetProperty("mimeType").GetString();
+                    string base64Data = inlineData.GetProperty("data").GetString();
+                    
+                    GD.Print($"Image received: {mimeType}");
+                    
+                    // Convert base64 to texture
+                    byte[] imageBytes = Convert.FromBase64String(base64Data);
+                    Image img = new Image();
+                    Error err;
+                    
+                    if (mimeType.Contains("png"))
+                    {
+                        err = img.LoadPngFromBuffer(imageBytes);
+                    }
+                    else
+                    {
+                        err = img.LoadJpgFromBuffer(imageBytes);
+                    }
+
+                    if (err == Error.Ok)
+                    {
+                        return ImageTexture.CreateFromImage(img);
+                    }
+                    else
+                    {
+                        GD.PushError($"Failed to load image from buffer: {err}");
+                        return null;
+                    }
+                }
+                else if (part.TryGetProperty("text", out JsonElement textElement))
+                {
+                    // Model returned text instead of image (possibly refused)
+                    string text = textElement.GetString();
+                    GD.PushWarning($"Gemini returned text instead of image: {text}");
+                }
             }
             
-            String content = message.GetProperty("content").GetString();
-            GD.PushError($"Gemini Refused to generate image. Reason: {content}");
+            GD.PushError("Image generation: No image data found in response.");
             return null;
-            
         }
-        
     }
 
 
-    // helper: SEND HTTP REQUEST
-    // New Helper: Creates a fresh HTTP node for every request to prevent "Error 0" locking issues
-    private async Task<String> PostRequest(String url, String jsonBody)
+    // Helper: Send HTTP Request to Google Gemini API
+    private async Task<String> PostGeminiRequest(String url, String jsonBody)
     {
-        // Create a disposable request node
         HttpRequest request = new HttpRequest();
         AddChild(request);
     
-        // Safety: Ensure it cleans up even if it crashes
         try 
         {
-            // Headers
+            // Google Gemini uses x-goog-api-key header
             String[] headers = [
                 "Content-Type: application/json",
-                $"Authorization: Bearer {APIKey}",
-                $"HTTP-Referer: {SiteRefer}"
+                $"x-goog-api-key: {APIKey}"
             ];
 
-            // Send
             Error err = request.Request(url, headers, HttpClient.Method.Post, jsonBody);
         
             if (err != Error.Ok)
@@ -661,7 +742,6 @@ public partial class MainInterface : Control
                 return null;
             }
 
-            // Wait for response
             var result = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);
         
             long responseCode = (long)result[1];
@@ -674,7 +754,7 @@ public partial class MainInterface : Control
             else
             {
                 String errorMsg = System.Text.Encoding.UTF8.GetString(body);
-                GD.PushError($"API Error (Code {responseCode}): {errorMsg}");
+                GD.PushError($"Gemini API Error (Code {responseCode}): {errorMsg}");
                 return null;
             }
         }
@@ -685,7 +765,6 @@ public partial class MainInterface : Control
         }
         finally
         {
-            // ALWAYS clean up the node
             request.QueueFree();
         }
     }
@@ -901,19 +980,6 @@ public partial class MainInterface : Control
 // DATA STRUCTURE FOR JSON PARSING
 //--------------------------------
 
-// structure sent to openrouter
-public class OpenRouterRequest
-{
-    public String model { get; set; }
-    public OpenRouterMessage[] messages { get; set; }
-}
-
-public class OpenRouterMessage
-{
-    public String role { get; set; }
-    public String content { get; set; }
-}
-
 // structure received from Gemini 3 pro (TEXT JSON DATA)
 public class ArtDescriptionResponse
 {
@@ -922,18 +988,4 @@ public class ArtDescriptionResponse
     public String platform_visual { get; set; }
     
     // add FUSION and NPC visual Later
-}
-
-// structure received from Nano Banana pro (IMAGE)
-public class NanoBananaResponse
-{
-    public Choice[] choices { get; set; }
-    public class Choice {public Message message { get; set; } }
-    public class Message
-    {
-        public String content { get; set; }
-        public ImageURL[] images { get; set; }
-    }
-    public class ImageURL {public URL url { get; set; }}
-    public class URL {public String url { get; set; }}
 }

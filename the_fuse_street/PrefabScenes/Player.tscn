@@ -31,7 +31,7 @@ shape = SubResource("RectangleShape2D_305tu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_305tu")
-position = Vector2(0, 20)
+position = Vector2(0, 40)
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
 visible = false

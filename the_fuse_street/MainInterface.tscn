@@ -1,21 +1,81 @@
-[gd_scene load_steps=7 format=3 uid="uid://rb7mlcqlored"]
+[gd_scene load_steps=31 format=3 uid="uid://rb7mlcqlored"]
 
 [ext_resource type="Script" uid="uid://dxmsb1bcs638n" path="res://Scripts/MainInterface.cs" id="1_83rwc"]
 [ext_resource type="PackedScene" uid="uid://dlcs7asqfodhe" path="res://ContentPreview.tscn" id="1_y1dj1"]
-[ext_resource type="Texture2D" uid="uid://p3keaftx51po" path="res://Misc/1.png" id="3_tr17e"]
-[ext_resource type="Texture2D" uid="uid://bqkfpnxvt2ksc" path="res://Misc/2.png" id="4_vscfo"]
+[ext_resource type="Texture2D" uid="uid://bmlmkvthqg2n2" path="res://DesignAssets/TabletbookSprites/UI_TabletBook_Page01a.png" id="2_vscfo"]
+[ext_resource type="Texture2D" uid="uid://buy4yxvuwvhem" path="res://DesignAssets/Titleblock.png" id="3_od06e"]
+[ext_resource type="Texture2D" uid="uid://y5pjdo7exh8o" path="res://DesignAssets/toggle-off-PORTRAIT.png" id="4_2qbyw"]
+[ext_resource type="Texture2D" uid="uid://c4fd6ay37vt4k" path="res://DesignAssets/UI_TabletBook_Cover01a.png" id="4_3h41k"]
+[ext_resource type="FontFile" uid="uid://bhgncri02nb7j" path="res://DesignAssets/联想小新潮酷体.ttf" id="4_u6nrg"]
+[ext_resource type="Texture2D" uid="uid://dvrw0tj0nf08k" path="res://DesignAssets/toggle-on-PORTRAIT.png" id="5_od06e"]
+[ext_resource type="Texture2D" uid="uid://ckk0ggbahxgn3" path="res://DesignAssets/input-bar-1.png" id="5_u6nrg"]
+[ext_resource type="Texture2D" uid="uid://d1xqnkl84elyw" path="res://DesignAssets/toggle-HOVER.png" id="6_2qbyw"]
+[ext_resource type="Texture2D" uid="uid://byw5r52tlwkoa" path="res://DesignAssets/bannarReset.png" id="6_i3k1s"]
+[ext_resource type="Texture2D" uid="uid://c0ynitkg1r8dh" path="res://DesignAssets/bannarSnapshot.png" id="7_2qbyw"]
+[ext_resource type="Texture2D" uid="uid://ct2u2vc2hwnix" path="res://DesignAssets/bannarReset-HOVER.png" id="7_i3k1s"]
+[ext_resource type="Texture2D" uid="uid://da4vmqmbox1qa" path="res://DesignAssets/playbuttonpng.png" id="7_xmh06"]
+[ext_resource type="Texture2D" uid="uid://dxjleqi1pawbp" path="res://DesignAssets/playbuttonHOVER.png" id="8_vpkk2"]
+[ext_resource type="Texture2D" uid="uid://batfo84681s17" path="res://DesignAssets/generation-tab.png" id="13_6o4l8"]
+[ext_resource type="Texture2D" uid="uid://idcf6jhhpe4x" path="res://DesignAssets/fusion-tab.png" id="14_4yumd"]
+[ext_resource type="Texture2D" uid="uid://fhvuqawhxxte" path="res://DesignAssets/UI_TabletBook_Page02b.png" id="16_sj5py"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3fv6l"]
-bg_color = Color(0.8089983, 0.8089983, 0.80899817, 1)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ac7ja"]
+texture = ExtResource("2_vscfo")
+texture_margin_top = 1.0
+texture_margin_bottom = 2.0
+expand_margin_bottom = 8.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1dj1"]
-bg_color = Color(0.39308554, 0.39308554, 0.39308533, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xmh06"]
+texture = ExtResource("4_3h41k")
+expand_margin_left = 15.0
+expand_margin_top = 10.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
 
-[node name="Control" type="Control" node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "Culture2LineEdit", "PlayButton", "ToggleButton", "ResetButton", "ScreenshotButton")]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u6nrg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmh06"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_u6nrg"]
+texture = ExtResource("5_u6nrg")
+texture_margin_left = 12.0
+texture_margin_right = 12.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sj5py"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6o4l8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vpkk2"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sj5py"]
+texture = ExtResource("7_xmh06")
+texture_margin_left = 20.0
+texture_margin_top = 10.0
+texture_margin_right = 20.0
+texture_margin_bottom = 10.0
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6o4l8"]
+texture = ExtResource("8_vpkk2")
+texture_margin_left = 20.0
+texture_margin_top = 10.0
+texture_margin_right = 20.0
+texture_margin_bottom = 10.0
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vscfo"]
+texture = ExtResource("2_vscfo")
+expand_margin_left = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4yumd"]
+texture = ExtResource("16_sj5py")
+texture_margin_left = 18.0
+texture_margin_top = 20.0
+texture_margin_right = 18.0
+
+[node name="Control" type="Control" node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "Culture2LineEdit", "PlayButton", "ToggleButton", "ResetButton", "ScreenshotButton", "GenLabel", "FusLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,13 +83,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_83rwc")
-UserDesTextEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/UserDesTextEdit")
-Culture1LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/Culture1LineEdit")
-Culture2LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/Culture2LineEdit")
-PlayButton = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Button")
+UserDesTextEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer3/UserDesTextEdit")
+Culture1LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/Culture1LineEdit")
+Culture2LineEdit = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer4/Culture2LineEdit")
+PlayButton = NodePath("PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Button")
 ToggleButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/ToggleButton")
 ResetButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer/ResetButton")
 ScreenshotButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer/ScreenshotButton")
+GenLabel = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/TextureRectGen")
+FusLabel = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/TextureRectFus")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -46,92 +108,152 @@ theme_override_constants/separation = 5
 [node name="LeftBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3fv6l")
+theme_override_styles/panel = SubResource("StyleBoxTexture_ac7ja")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+texture = ExtResource("3_od06e")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="TitleDes" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="TitleDes" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_font_sizes/font_size = 25
 text = "Description 描述"
 horizontal_alignment = 1
 
-[node name="UserDesTextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 300)
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 30
+
+[node name="UserDesTextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer3"]
+clip_contents = false
+custom_minimum_size = Vector2(0, 238.77)
+layout_mode = 2
+theme_override_colors/caret_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0.12156863, 0.14901961, 0.21960784, 0.39215687)
+theme_override_constants/caret_width = 2
+theme_override_constants/line_spacing = 3
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxTexture_xmh06")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u6nrg")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_xmh06")
 placeholder_text = "You can describe what’s the culture, with any unique art style/designs/outfitting/architecture that would be helpful for generating the scene and game character.
 
 你可以描述一下文化背景，包括任何有助场景和游戏角色的创作的独特的艺术风格、设计、服饰或建筑。"
 wrap_mode = 1
 caret_blink = true
 
-[node name="TitleC1" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="TitleC1" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_font_sizes/font_size = 20
 text = "Culture 1 文化1"
 horizontal_alignment = 1
 
-[node name="Culture1LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 15
+
+[node name="Culture1LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_u6nrg")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_sj5py")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6o4l8")
 alignment = 1
 
-[node name="TitleC2" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="TitleC2" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_font_sizes/font_size = 20
 text = "Culture 2 文化2"
 horizontal_alignment = 1
 
-[node name="Culture2LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="MarginContainer4" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 10
+
+[node name="Culture2LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer4"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_u6nrg")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_sj5py")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6o4l8")
 placeholder_text = "若不选择融合请保持空白"
 alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 90
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_y1dj1")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vpkk2")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_right = 50
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="TextureButton" type="TextureButton" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
-visible = false
+[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.24428234, 0.28927386, 0.40454757, 1)
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxTexture_sj5py")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_sj5py")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6o4l8")
+text = "PLAY!"
 
-[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "PLAY"
-
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
+theme_override_colors/font_color = Color(0.1683734, 0.20279366, 0.2912168, 1)
+theme_override_fonts/font = ExtResource("4_u6nrg")
 theme_override_font_sizes/font_size = 20
-text = "Play/Pause
-开始/暂停"
+text = "Start/Restart
+开始/重来"
 horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer"]
@@ -154,11 +276,11 @@ render_target_update_mode = 4
 custom_minimum_size = Vector2(1245, 200)
 layout_mode = 2
 size_flags_vertical = 8
-theme_override_styles/panel = SubResource("StyleBoxFlat_3fv6l")
+theme_override_styles/panel = SubResource("StyleBoxTexture_vscfo")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 40
+theme_override_constants/margin_left = 80
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 10
 
@@ -166,91 +288,109 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="ToggleButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(141.185, 0)
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 toggle_mode = true
-texture_normal = ExtResource("3_tr17e")
-texture_pressed = ExtResource("4_vscfo")
+texture_normal = ExtResource("4_2qbyw")
+texture_pressed = ExtResource("5_od06e")
+texture_hover = ExtResource("6_2qbyw")
 ignore_texture_size = true
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 40
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 45
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TextureRectGen" type="TextureRect" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-text = "Generation 生成"
+texture = ExtResource("13_6o4l8")
+expand_mode = 5
+stretch_mode = 5
 
-[node name="Label2" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TextureRectFus" type="TextureRect" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-text = "Fusion 融合"
+texture = ExtResource("14_4yumd")
+expand_mode = 5
+stretch_mode = 5
 
 [node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 70
+theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 70
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2"]
 layout_mode = 2
-theme_override_constants/separation = 39
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="ResetButton" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ResetButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(200, 70)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Scene Reset 重置场景"
+texture_normal = ExtResource("6_i3k1s")
+texture_pressed = ExtResource("6_i3k1s")
+texture_hover = ExtResource("7_i3k1s")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="ScreenshotButton" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ScreenshotButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+texture_normal = ExtResource("7_2qbyw")
+texture_pressed = ExtResource("7_2qbyw")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ScreenshotButton2" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Snapshot 截屏"
 
 [node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 95
-theme_override_constants/margin_top = 30
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 90
+theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3"]
 layout_mode = 2
-theme_override_constants/separation = 19
 
-[node name="OptionButton" type="OptionButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/VBoxContainer"]
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
-item_count = 4
-popup/item_0/text = "None"
-popup/item_0/id = 0
-popup/item_1/text = "Arabic 阿拉伯风格"
-popup/item_1/id = 1
-popup/item_2/text = "Preset 2"
-popup/item_2/id = 2
-popup/item_3/text = "Preset 3"
-popup/item_3/id = 3
+theme_override_colors/font_color = Color(0.15487579, 0.15487614, 0.15487579, 1)
+theme_override_colors/font_readonly_color = Color(0, 0, 0, 0.8352941)
+theme_override_constants/line_spacing = 1
+theme_override_fonts/font = ExtResource("4_u6nrg")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxTexture_4yumd")
+theme_override_styles/read_only = SubResource("StyleBoxTexture_4yumd")
+text = "The FuseStreet is a Gemini 3 Pro + Nano Banana Pro‑powered AI tool for rapid pixel game art/cultural design test‑fit.
 
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/VBoxContainer/OptionButton"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -47.0
-offset_top = -11.5
-offset_right = 47.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Presets 预设"
+The FuseStreet是一个 Gemini 3 Pro + Nano Banana Pro 驱动的 AI 快速像素游戏美术/文化设计测试适配工具。
+                       
+                   —— Copyright 2025 Tianyu"
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+virtual_keyboard_show_on_focus = false
+middle_mouse_paste_enabled = false
+empty_selection_clipboard_enabled = false
+wrap_mode = 1
 
 [node name="TextRequest" type="HTTPRequest" parent="."]
 
