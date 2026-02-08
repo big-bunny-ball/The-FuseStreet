@@ -54,4 +54,14 @@ A 2D side-scrolling platformer where players explore worlds born from cultural f
 6. 角色跑起来了！
 
 
-![Screenshot-1](FinalUIAndVisuals/hhhh.png)
+![Screenshot-1](FinalUIAndVisuals/blank.png)
+
+![Screenshot-2](FinalUIAndVisuals/1.png)
+
+![Screenshot-3](FinalUIAndVisuals/2.png)
+
+![Screenshot-4](FinalUIAndVisuals/3.png)
+
+![Screenshot-5](FinalUIAndVisuals/4.png)
+
+![Screenshot-6](FinalUIAndVisuals/5.png)
