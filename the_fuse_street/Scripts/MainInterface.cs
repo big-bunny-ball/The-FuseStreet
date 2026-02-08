@@ -28,18 +28,18 @@ public partial class MainInterface : Control
 
     // scene reference - find player, background, platform... in the sub-viewport
     private SubViewport SubViewport;
-    
-    public const String WorldNodePath = "PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport/World";
+
+    private const String WorldNodePath = "PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport/World";
 
     // Track if subviewport has focus for input routing
     private bool subViewportFocused = false;
     private SubViewportContainer _subViewportContainer;
 
     // Google Gemini API - Direct
-    public const String GeminiTextUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent"; // Text API
-    public const String GeminiImageUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent";  // Image API
+    private const String GeminiTextUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent"; // Text API
+    private const String GeminiImageUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent";  // Image API
 
-    private const String APIKey = "AIzaSyBKJksMXi5_iejYGy3Bgq4N_il4mSgS1AM"; // Google Cloud Console API Key
+    private const String APIKey = "MY GOOGLE CLOUD CONSOLE KEY"; // Google Cloud Console API Key
    
 
     // READT
@@ -85,11 +85,11 @@ public partial class MainInterface : Control
         if (ToggleButton.ButtonPressed)
         {
             GenLabel.Modulate = new Color(1, 1, 1, 0.5f);
-            FusLabel.Modulate = new Color(1, 1, 1, 1.0f);
+            FusLabel.Modulate = new Color(1, 1, 1);
         }
         else
         {
-            GenLabel.Modulate = new Color(1, 1, 1, 1.0f);
+            GenLabel.Modulate = new Color(1, 1, 1);
             FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
         }
     }
@@ -983,9 +983,7 @@ public partial class MainInterface : Control
 // structure received from Gemini 3 pro (TEXT JSON DATA)
 public class ArtDescriptionResponse
 {
-    public String background_prompt { get; set; }
-    public String player_visual { get; set; }
-    public String platform_visual { get; set; }
-    
-    // add FUSION and NPC visual Later
+    public string background_prompt { get; set; }
+    public string player_visual { get; set; }
+    public string platform_visual { get; set; }
 }

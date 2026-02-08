@@ -33,7 +33,7 @@ public partial class MainInterface : Control
     private const String SiteRefer = "https://fusestreet.app";
     private const String TextModel = "google/gemini-3-pro-preview";
     private const String ImageModel = "google/gemini-3-pro-image-preview";
-    private const String APIKey = "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";
+    private const String APIKey = "OPENROUTER KEY HERE";
 
     // Track if subviewport has focus for input routing
     private bool subViewportFocused = false;

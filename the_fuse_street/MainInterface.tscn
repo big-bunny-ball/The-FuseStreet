@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://rb7mlcqlored"]
+[gd_scene format=3 uid="uid://rb7mlcqlored"]
 
 [ext_resource type="Script" uid="uid://dxmsb1bcs638n" path="res://Scripts/MainInterface.cs" id="1_83rwc"]
 [ext_resource type="PackedScene" uid="uid://dlcs7asqfodhe" path="res://ContentPreview.tscn" id="1_y1dj1"]
@@ -75,7 +75,7 @@ texture_margin_left = 18.0
 texture_margin_top = 20.0
 texture_margin_right = 18.0
 
-[node name="Control" type="Control" node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "Culture2LineEdit", "PlayButton", "ToggleButton", "ResetButton", "ScreenshotButton", "GenLabel", "FusLabel")]
+[node name="Control" type="Control" unique_id=215076526 node_paths=PackedStringArray("UserDesTextEdit", "Culture1LineEdit", "Culture2LineEdit", "PlayButton", "ToggleButton", "ResetButton", "ScreenshotButton", "GenLabel", "FusLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -93,7 +93,7 @@ ScreenshotButton = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBa
 GenLabel = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/TextureRectGen")
 FusLabel = NodePath("PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/TextureRectFus")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=696431999]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,37 +101,37 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=2026743082]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="LeftBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+[node name="LeftBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer" unique_id=1931029907]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_ac7ja")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel" unique_id=1014332462]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer" unique_id=1022808469]
 custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 texture = ExtResource("3_od06e")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer" unique_id=451584109]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer" unique_id=41415616]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TitleDes" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TitleDes" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=2061607964]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -139,15 +139,14 @@ theme_override_font_sizes/font_size = 25
 text = "Description 描述"
 horizontal_alignment = 1
 
-[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=116285315]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 30
 
-[node name="UserDesTextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer3"]
-clip_contents = false
+[node name="UserDesTextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer3" unique_id=1035446313]
 custom_minimum_size = Vector2(0, 238.77)
 layout_mode = 2
 theme_override_colors/caret_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
@@ -166,7 +165,7 @@ placeholder_text = "You can describe what’s the culture, with any unique art s
 wrap_mode = 1
 caret_blink = true
 
-[node name="TitleC1" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TitleC1" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1464224065]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -174,14 +173,14 @@ theme_override_font_sizes/font_size = 20
 text = "Culture 1 文化1"
 horizontal_alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=344073891]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 15
 
-[node name="Culture1LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="Culture1LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=323550421]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -190,7 +189,7 @@ theme_override_styles/read_only = SubResource("StyleBoxEmpty_sj5py")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6o4l8")
 alignment = 1
 
-[node name="TitleC2" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TitleC2" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=435970677]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.12189231, 0.14939255, 0.22010627, 1)
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -198,14 +197,14 @@ theme_override_font_sizes/font_size = 20
 text = "Culture 2 文化2"
 horizontal_alignment = 1
 
-[node name="MarginContainer4" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer4" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=744488744]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 10
 
-[node name="Culture2LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer4"]
+[node name="Culture2LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer4" unique_id=1712677608]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -215,29 +214,29 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_6o4l8")
 placeholder_text = "若不选择融合请保持空白"
 alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1632343063]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1242849327]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_vpkk2")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer" unique_id=1885399454]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 60
 theme_override_constants/margin_right = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer" unique_id=2064971021]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=920440995]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.24428234, 0.28927386, 0.40454757, 1)
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -247,7 +246,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_sj5py")
 theme_override_styles/hover = SubResource("StyleBoxTexture_6o4l8")
 text = "PLAY!"
 
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/LeftBarPanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=746149152]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1683734, 0.20279366, 0.2912168, 1)
 theme_override_fonts/font = ExtResource("4_u6nrg")
@@ -256,38 +255,38 @@ text = "Start/Restart
 开始/重来"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=1665526285]
 layout_mode = 2
 alignment = 2
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="PanelContainer/HBoxContainer/VBoxContainer"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=519720070]
 layout_mode = 2
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer" unique_id=1949681251]
 handle_input_locally = false
 size = Vector2i(1245, 696)
 render_target_update_mode = 4
 
-[node name="World" parent="PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_y1dj1")]
+[node name="World" parent="PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport" unique_id=1189018440 instance=ExtResource("1_y1dj1")]
 
-[node name="BottomBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/VBoxContainer"]
+[node name="BottomBarPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=119870000]
 custom_minimum_size = Vector2(1245, 200)
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_vscfo")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel" unique_id=253445284]
 layout_mode = 2
 theme_override_constants/margin_left = 80
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer" unique_id=1977445903]
 layout_mode = 2
 
-[node name="ToggleButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+[node name="ToggleButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer" unique_id=2078367560]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 toggle_mode = true
@@ -297,41 +296,41 @@ texture_hover = ExtResource("6_2qbyw")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer" unique_id=804455042]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer" unique_id=269461625]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="TextureRectGen" type="TextureRect" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TextureRectGen" type="TextureRect" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=173686727]
 custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
 texture = ExtResource("13_6o4l8")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="TextureRectFus" type="TextureRect" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="TextureRectFus" type="TextureRect" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=1207887404]
 custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
 texture = ExtResource("14_4yumd")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer" unique_id=1079367791]
 layout_mode = 2
 theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 70
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2" unique_id=2093188823]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="ResetButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ResetButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer" unique_id=1924291845]
 custom_minimum_size = Vector2(200, 70)
 layout_mode = 2
 texture_normal = ExtResource("6_i3k1s")
@@ -340,7 +339,7 @@ texture_hover = ExtResource("7_i3k1s")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ScreenshotButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ScreenshotButton" type="TextureButton" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer" unique_id=171646696]
 custom_minimum_size = Vector2(200, 70)
 layout_mode = 2
 texture_normal = ExtResource("7_2qbyw")
@@ -348,23 +347,23 @@ texture_pressed = ExtResource("7_2qbyw")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ScreenshotButton2" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="ScreenshotButton2" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer2/VBoxContainer" unique_id=1114250649]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Snapshot 截屏"
 
-[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer" unique_id=699230411]
 layout_mode = 2
 theme_override_constants/margin_left = 80
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 90
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3" unique_id=564067277]
 layout_mode = 2
 
-[node name="TextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/HBoxContainer"]
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/HBoxContainer/VBoxContainer/BottomBarPanel/MarginContainer/HBoxContainer/MarginContainer3/HBoxContainer" unique_id=859277005]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15487579, 0.15487614, 0.15487579, 1)
@@ -386,12 +385,12 @@ shortcut_keys_enabled = false
 selecting_enabled = false
 deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
-virtual_keyboard_enabled = false
-virtual_keyboard_show_on_focus = false
 middle_mouse_paste_enabled = false
 empty_selection_clipboard_enabled = false
 wrap_mode = 1
+virtual_keyboard_enabled = false
+virtual_keyboard_show_on_focus = false
 
-[node name="TextRequest" type="HTTPRequest" parent="."]
+[node name="TextRequest" type="HTTPRequest" parent="." unique_id=1413441094]
 
-[node name="ImageRequest" type="HTTPRequest" parent="."]
+[node name="ImageRequest" type="HTTPRequest" parent="." unique_id=22582022]
