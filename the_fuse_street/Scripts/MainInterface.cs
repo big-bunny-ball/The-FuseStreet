@@ -9,182 +9,182 @@ namespace TheFuseStreet.Scripts;
 
 public partial class MainInterface : Control
 {
-    [Export] public TextEdit UserDesTextEdit;
-    [Export] public LineEdit Culture1LineEdit;
-    [Export] public LineEdit Culture2LineEdit;
+	[Export] public TextEdit UserDesTextEdit;
+	[Export] public LineEdit Culture1LineEdit;
+	[Export] public LineEdit Culture2LineEdit;
 
-    // === ALL THESE BUTTONS NEED TO BE CHANGE TO TEXTUREBUTTON WHEN UI DESIGN IS FINALISED!
-    [Export] public Button PlayButton;
-    [Export] public TextureButton ToggleButton;
-    [Export] public TextureButton ResetButton;
-    [Export] public TextureButton ScreenshotButton;
+	// === ALL THESE BUTTONS NEED TO BE CHANGE TO TEXTUREBUTTON WHEN UI DESIGN IS FINALISED!
+	[Export] public Button PlayButton;
+	[Export] public TextureButton ToggleButton;
+	[Export] public TextureButton ResetButton;
+	[Export] public TextureButton ScreenshotButton;
 
-    [Export] public TextureRect GenLabel;
-    [Export] public TextureRect FusLabel;
+	[Export] public TextureRect GenLabel;
+	[Export] public TextureRect FusLabel;
 
-    // http req nodes
-    private HttpRequest TextRequest;
-    private HttpRequest ImageRequest;
+	// http req nodes
+	private HttpRequest TextRequest;
+	private HttpRequest ImageRequest;
 
-    // scene reference - find player, background, platform... in the sub-viewport
-    private SubViewport SubViewport;
+	// scene reference - find player, background, platform... in the sub-viewport
+	private SubViewport SubViewport;
 
-    private const String WorldNodePath = "PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport/World";
+	private const String WorldNodePath = "PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport/World";
 
-    // Track if subviewport has focus for input routing
-    private bool subViewportFocused = false;
-    private SubViewportContainer _subViewportContainer;
+	// Track if subviewport has focus for input routing
+	private bool subViewportFocused = false;
+	private SubViewportContainer _subViewportContainer;
 
-    // Google Gemini API - Direct
-    private const String GeminiTextUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent"; // Text API
-    private const String GeminiImageUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent";  // Image API
+	// Google Gemini API - Direct
+	private const String GeminiTextUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent"; // Text API
+	private const String GeminiImageUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent";  // Image API
 
-    private const String APIKey = "MY GOOGLE CLOUD CONSOLE KEY"; // Google Cloud Console API Key
+	private const String APIKey = "MY GOOGLE CLOUD CONSOLE KEY"; // Google Cloud Console API Key
    
 
-    // READT
-    public override void _Ready()
-    {
-        TextRequest = GetNode<HttpRequest>("TextRequest");
-        ImageRequest = GetNode<HttpRequest>("ImageRequest");
-        SubViewport = GetNode<SubViewport>("PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport");
-        _subViewportContainer = GetNode<SubViewportContainer>("PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer");
+	// READT
+	public override void _Ready()
+	{
+		TextRequest = GetNode<HttpRequest>("TextRequest");
+		ImageRequest = GetNode<HttpRequest>("ImageRequest");
+		SubViewport = GetNode<SubViewport>("PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer/SubViewport");
+		_subViewportContainer = GetNode<SubViewportContainer>("PanelContainer/HBoxContainer/VBoxContainer/SubViewportContainer");
 
-        PlayButton.Pressed += OnPlayButtonPressed;
-        ScreenshotButton.Pressed += OnSnapshotPressed;
-        ResetButton.Pressed += OnResetPressed;
+		PlayButton.Pressed += OnPlayButtonPressed;
+		ScreenshotButton.Pressed += OnSnapshotPressed;
+		ResetButton.Pressed += OnResetPressed;
 
-        UserDesTextEdit.FocusEntered += () => subViewportFocused = false;
-        Culture1LineEdit.FocusEntered += () => subViewportFocused= false;
-        Culture2LineEdit.FocusEntered += () => subViewportFocused = false;
+		UserDesTextEdit.FocusEntered += () => subViewportFocused = false;
+		Culture1LineEdit.FocusEntered += () => subViewportFocused= false;
+		Culture2LineEdit.FocusEntered += () => subViewportFocused = false;
 
-        _subViewportContainer.GuiInput += OnSubViewportGuiInput;
+		_subViewportContainer.GuiInput += OnSubViewportGuiInput;
 
-        ToggleButton.Toggled += OnToggleChanged;
-        FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
+		ToggleButton.Toggled += OnToggleChanged;
+		FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
 
-    }
-
-
-    public override void _Process(double delta)
-    {
-        // Update player input state based on focus
-        var player = SubViewport.GetNode<Player>("World/Player");
-        player.InputEnabled = subViewportFocused;
-    }
+	}
 
 
-    private void OnToggleChanged(bool isOn)
-    {
-        UpdateToggleLables();
-    }
+	public override void _Process(double delta)
+	{
+		// Update player input state based on focus
+		var player = SubViewport.GetNode<Player>("World/Player");
+		player.InputEnabled = subViewportFocused;
+	}
 
 
-    private void UpdateToggleLables()
-    {
-        if (ToggleButton.ButtonPressed)
-        {
-            GenLabel.Modulate = new Color(1, 1, 1, 0.5f);
-            FusLabel.Modulate = new Color(1, 1, 1);
-        }
-        else
-        {
-            GenLabel.Modulate = new Color(1, 1, 1);
-            FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
-        }
-    }
+	private void OnToggleChanged(bool isOn)
+	{
+		UpdateToggleLables();
+	}
 
 
-    // PlayButton pressed: call task based on Toggle status
-    private void OnPlayButtonPressed()
-    {
-        if (ToggleButton.ButtonPressed)
-        {
-            if (string.IsNullOrWhiteSpace(Culture2LineEdit.Text.StripEdges()))
-            {
-                GD.PushWarning("Culture 2 is empty! Switch to generation mode instead...");
-                return;
-            }
-            _ = FusionPressedAsync();  // FUSION MODE
-        }
-        else
-        {
-            _ = GeneratePressedAsync();  // GENERATION MODE
-        }
-    }
+	private void UpdateToggleLables()
+	{
+		if (ToggleButton.ButtonPressed)
+		{
+			GenLabel.Modulate = new Color(1, 1, 1, 0.5f);
+			FusLabel.Modulate = new Color(1, 1, 1);
+		}
+		else
+		{
+			GenLabel.Modulate = new Color(1, 1, 1);
+			FusLabel.Modulate = new Color(1, 1, 1, 0.5f);
+		}
+	}
 
-    
-    private async Task GeneratePressedAsync()
-    {
-        GD.Print(">> starting generation pipeline... <<");
-        PlayButton.Disabled = true;
 
-        try
-        {
-            // step 1: generate visual description from gemini
-            ArtDescriptionResponse artData = await GetArtDirectionFromGemini(
-                UserDesTextEdit.Text.StripEdges(),
-                Culture1LineEdit.Text.StripEdges()      
-            ) ?? throw new Exception("failed to get art direction!");
+	// PlayButton pressed: call task based on Toggle status
+	private void OnPlayButtonPressed()
+	{
+		if (ToggleButton.ButtonPressed)
+		{
+			if (string.IsNullOrWhiteSpace(Culture2LineEdit.Text.StripEdges()))
+			{
+				GD.PushWarning("Culture 2 is empty! Switch to generation mode instead...");
+				return;
+			}
+			_ = FusionPressedAsync();  // FUSION MODE
+		}
+		else
+		{
+			_ = GeneratePressedAsync();  // GENERATION MODE
+		}
+	}
 
-            GD.Print($"BACKGROUND: {artData.background_prompt}");
-            GD.Print($"PLAYER: {artData.player_visual}");
-            GD.Print($"PLATFORM: {artData.platform_visual}");
+	
+	private async Task GeneratePressedAsync()
+	{
+		GD.Print(">> starting generation pipeline... <<");
+		PlayButton.Disabled = true;
 
-            // step 2: generate player texture
-            GD.Print("generating player sprite...");
+		try
+		{
+			// step 1: generate visual description from gemini
+			ArtDescriptionResponse artData = await GetArtDirectionFromGemini(
+				UserDesTextEdit.Text.StripEdges(),
+				Culture1LineEdit.Text.StripEdges()      
+			) ?? throw new Exception("failed to get art direction!");
 
-            Texture2D playerTexture = await GenerateTexture(artData.player_visual, true, false);
+			GD.Print($"BACKGROUND: {artData.background_prompt}");
+			GD.Print($"PLAYER: {artData.player_visual}");
+			GD.Print($"PLATFORM: {artData.platform_visual}");
 
-            // not apply the texture if generation failed
-            if (playerTexture != null) 
-            {
-                ApplyTextureToPlayer(playerTexture);
-            }
-            else
-            {
-                GD.PushError("player texture generation failed. Skipping!");
-            }
+			// step 2: generate player texture
+			GD.Print("generating player sprite...");
 
-            // step 3: generate background texture
-            GD.Print("generating background...");
+			Texture2D playerTexture = await GenerateTexture(artData.player_visual, true, false);
 
-            Texture2D backgroundTexture = await GenerateTexture(artData.background_prompt, false, false);
-            if (backgroundTexture != null)
-            {
-                ApplyTextureToBackground(backgroundTexture);
-            }
+			// not apply the texture if generation failed
+			if (playerTexture != null) 
+			{
+				ApplyTextureToPlayer(playerTexture);
+			}
+			else
+			{
+				GD.PushError("player texture generation failed. Skipping!");
+			}
 
-            // step 4: generate platform texture
-            GD.Print("generating platform...");
+			// step 3: generate background texture
+			GD.Print("generating background...");
 
-            string platformPrompt = !string.IsNullOrEmpty(artData.platform_visual) 
-                                    ? artData.platform_visual 
-                                    : "Ground texture matching " + artData.background_prompt; // add a fall-back
-            
-            Texture2D platformTexture = await GenerateTexture(platformPrompt, false, true);
-            if (platformTexture != null)
-            {
-                ApplyTextureToPlatform(platformTexture);
-            }
+			Texture2D backgroundTexture = await GenerateTexture(artData.background_prompt, false, false);
+			if (backgroundTexture != null)
+			{
+				ApplyTextureToBackground(backgroundTexture);
+			}
 
-            GD.Print("current generation pipeline done!");
-        }
-        catch (Exception e)
-        {
-            GD.PushError("pipeline ERROR! : " + e.Message);
-        }
-        finally
-        {
-            PlayButton.Disabled = false;
-        }
-    }
+			// step 4: generate platform texture
+			GD.Print("generating platform...");
 
-    // Text Generation
-    private async Task<ArtDescriptionResponse> GetArtDirectionFromGemini(string userDescription, string cultureDefinition)
-    {
-        // system prompt
-        String systemPrompt = @"
+			string platformPrompt = !string.IsNullOrEmpty(artData.platform_visual) 
+									? artData.platform_visual 
+									: "Ground texture matching " + artData.background_prompt; // add a fall-back
+			
+			Texture2D platformTexture = await GenerateTexture(platformPrompt, false, true);
+			if (platformTexture != null)
+			{
+				ApplyTextureToPlatform(platformTexture);
+			}
+
+			GD.Print("current generation pipeline done!");
+		}
+		catch (Exception e)
+		{
+			GD.PushError("pipeline ERROR! : " + e.Message);
+		}
+		finally
+		{
+			PlayButton.Disabled = false;
+		}
+	}
+
+	// Text Generation
+	private async Task<ArtDescriptionResponse> GetArtDirectionFromGemini(string userDescription, string cultureDefinition)
+	{
+		// system prompt
+		String systemPrompt = @"
         You are the lead tech artist for a 2D side-scrolling platformer game.
         Your job is to convert the user's idea and culture description into three short PROMPTS
         for an image generator: one for the BACKGROUND, one for the PLAYER, and one for the PLATFORM.
@@ -198,7 +198,7 @@ public partial class MainInterface : Control
         - Everything is in focus: no depth-of-field blur, no soft-focus smearing, no photographic bokeh.
         - Use a consistent art style, colour palette and lighting across BACKGROUND, PLAYER and PLATFORM.
 
-        2) BACKGROUND (""background_prompt"")
+		2) BACKGROUND (""background_prompt"")
         - Goal: the main side-view environment layer behind the ground where the player runs,
         like the street / ruins / forest edge seen in classic 2D platformers.
         - Camera: side view, medium distance; not an extreme close-up wall, not a tiny far-away skyline.
@@ -229,7 +229,7 @@ public partial class MainInterface : Control
         - DO NOT include any text, numbers, or UI elements in the background.
         - 不要在背景图中画任何文字、数字、百分比或标注。
 
-        3) PLAYER (""player_visual"")
+		3) PLAYER (""player_visual"")
         - Goal: a 2-row SIDE-VIEW CHARACTER SPRITESHEET for a platformer.
         - Style: pixel-art-inspired or sharp cel-style 2D:
         - clear outline, strong readable silhouette, limited but harmonious colour palette.
@@ -262,7 +262,7 @@ public partial class MainInterface : Control
         - 不要写任何文字、标题、标签或水印。
         - 不要在一个格子里画多个人物。
 
-        4) PLATFORM (""platform_visual"")
+		4) PLATFORM (""platform_visual"")
         - Goal: a ground material texture the player runs on.
         - A single seamless square tile viewed from straight top-down (orthographic).
         - The surface must look like walkable ground: dirt, sand, stone, grass, or an equivalent material
@@ -271,140 +271,140 @@ public partial class MainInterface : Control
         - clear but simple tonal blocks, not noisy realism.
         - Very low contrast, soft mottled detail; the ground should not draw more attention than the player.
         - Avoid: bricks, checkerboards, mosaics, decorative borders, or anything that looks like a wall or carpet.
-        - Useful phrases to include: ""seamless texture"", ""ground tile"", ""top-down view"",
-        ""flat lighting"", ""soft irregular mottled surface"", ""subtle variation"", ""walkable ground"".
+		- Useful phrases to include: ""seamless texture"", ""ground tile"", ""top-down view"",
+		""flat lighting"", ""soft irregular mottled surface"", ""subtle variation"", ""walkable ground"".
 
         OUTPUT FORMAT:
         Return ONLY a single valid JSON object. Do not add explanations, comments, or markdown fences.
         The JSON must have exactly this structure:
 
         {
-        ""background_prompt"": ""..."",
-        ""player_visual"": ""..."",
-        ""platform_visual"": ""...""
+		""background_prompt"": ""..."",
+		""player_visual"": ""..."",
+		""platform_visual"": ""...""
         }
-        ";
+		";
 
-        // user prompt
-        String userPrompt =
-        "User idea: " + userDescription +
-        ". Culture or setting: " + cultureDefinition +
-        ". Use the structure of classic 2D platformer scenes: a side-view environment band behind a ground line," +
-        " with mid-distance facades or landscape in the middle of the image and a clear sky band above." +
-        " The style should be sharp pixel-art-inspired 2D game art, with no blur." +
-        " The player output is a small side-view spritesheet on pure white, and the platform is a top-down seamless ground tile." +
-        " Follow the system rules exactly and respond with JSON only.";
+		// user prompt
+		String userPrompt =
+		"User idea: " + userDescription +
+		". Culture or setting: " + cultureDefinition +
+		". Use the structure of classic 2D platformer scenes: a side-view environment band behind a ground line," +
+		" with mid-distance facades or landscape in the middle of the image and a clear sky band above." +
+		" The style should be sharp pixel-art-inspired 2D game art, with no blur." +
+		" The player output is a small side-view spritesheet on pure white, and the platform is a top-down seamless ground tile." +
+		" Follow the system rules exactly and respond with JSON only.";
 
-        // Google Gemini API Request
-        var requestBody = new
-        {
-            system_instruction = new
-            {
-                parts = new[] { new { text = systemPrompt } }
-            },
-            contents = new[]
-            {
-                new
-                {
-                    role = "user",
-                    parts = new[] { new { text = userPrompt } }
-                }
-            },
-            generationConfig = new
-            {
-                response_mime_type = "application/json"
-            }
-        };
+		// Google Gemini API Request
+		var requestBody = new
+		{
+			system_instruction = new
+			{
+				parts = new[] { new { text = systemPrompt } }
+			},
+			contents = new[]
+			{
+				new
+				{
+					role = "user",
+					parts = new[] { new { text = userPrompt } }
+				}
+			},
+			generationConfig = new
+			{
+				response_mime_type = "application/json"
+			}
+		};
 
-        String jsonResponse = await PostGeminiRequest(GeminiTextUrl, JsonSerializer.Serialize(requestBody));
-        
-        if (string.IsNullOrEmpty(jsonResponse)) return null;
+		String jsonResponse = await PostGeminiRequest(GeminiTextUrl, JsonSerializer.Serialize(requestBody));
+		
+		if (string.IsNullOrEmpty(jsonResponse)) return null;
 
-        using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
-        {
-            string contentString = doc.RootElement
-                .GetProperty("candidates")[0]
-                .GetProperty("content")
-                .GetProperty("parts")[0]
-                .GetProperty("text")
-                .GetString();
-            
-            
-            // handle possible null content from JSON
-            if (string.IsNullOrWhiteSpace(contentString))
-            {
-                GD.PushError("Text generation: 'content' field was null or empty.");
-                return null;
-            }
+		using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
+		{
+			string contentString = doc.RootElement
+				.GetProperty("candidates")[0]
+				.GetProperty("content")
+				.GetProperty("parts")[0]
+				.GetProperty("text")
+				.GetString();
+			
+			
+			// handle possible null content from JSON
+			if (string.IsNullOrWhiteSpace(contentString))
+			{
+				GD.PushError("Text generation: 'content' field was null or empty.");
+				return null;
+			}
 
-            // strip possible ```json fences just in case
-            contentString = contentString
-                .Replace("```json", string.Empty)
-                .Replace("```", string.Empty)
-                .Trim();
+			// strip possible ```json fences just in case
+			contentString = contentString
+				.Replace("```json", string.Empty)
+				.Replace("```", string.Empty)
+				.Trim();
 
-            return JsonSerializer.Deserialize<ArtDescriptionResponse>(contentString);
-        }
-    }
-
-
-    // Fusion Pressed Async
-    private async Task FusionPressedAsync()
-    {
-        GD.Print(">> Starting Fusion Pipeline <<");
-        PlayButton.Disabled = true;
-
-        try
-        {
-            ArtDescriptionResponse artData = await 
-            GetFusionArtDirectionFromGemini(
-            UserDesTextEdit.Text.StripEdges(),
-            Culture1LineEdit.Text.StripEdges(),
-            Culture2LineEdit.Text.StripEdges()
-            ) ?? throw new Exception("failed to get fusion art direction!");
-
-            GD.Print($"FUSED BACKGROUND: {artData.background_prompt}");
-            GD.Print($"FUSED PLAYER: {artData.player_visual}");
-            GD.Print($"FUSED PLATFORM: {artData.platform_visual}");
-
-            // Same texture generation flow as regular generation
-            GD.Print("generating fused player sprite...");
-            Texture2D playerTexture = await GenerateTexture(artData.player_visual, true, false);
-            if (playerTexture != null) ApplyTextureToPlayer(playerTexture);
-            else GD.PushError("Fused player texture generation failed. Skipping!");
-            
-
-            GD.Print("generating fused background...");
-            Texture2D backgroundTexture = await GenerateTexture(artData.background_prompt, false, false);
-
-            if (backgroundTexture != null) ApplyTextureToBackground(backgroundTexture);
-
-            GD.Print("generating fused platform...");
-            string platformPrompt = !string.IsNullOrEmpty(artData.platform_visual) 
-                ? artData.platform_visual 
-                : "Ground texture blending " + Culture1LineEdit.Text + " and " + Culture2LineEdit.Text;
-            
-            Texture2D platformTexture = await GenerateTexture(platformPrompt, false, true);
-            if (platformTexture != null) ApplyTextureToPlatform(platformTexture);
-
-            GD.Print("FUSION pipeline done!");
-        }
-        catch (Exception e)
-        {
-            GD.PushError("FUSION pipeline ERROR: " + e.Message);
-        }
-        finally
-        {
-            PlayButton.Disabled = false;
-        }
-    }
+			return JsonSerializer.Deserialize<ArtDescriptionResponse>(contentString);
+		}
+	}
 
 
-    private async Task<ArtDescriptionResponse> GetFusionArtDirectionFromGemini(
-        String userDescription, String culture1, String culture2)
-        {
-            // System prompt for fusion
-            String systemPrompt = @"
+	// Fusion Pressed Async
+	private async Task FusionPressedAsync()
+	{
+		GD.Print(">> Starting Fusion Pipeline <<");
+		PlayButton.Disabled = true;
+
+		try
+		{
+			ArtDescriptionResponse artData = await 
+			GetFusionArtDirectionFromGemini(
+			UserDesTextEdit.Text.StripEdges(),
+			Culture1LineEdit.Text.StripEdges(),
+			Culture2LineEdit.Text.StripEdges()
+			) ?? throw new Exception("failed to get fusion art direction!");
+
+			GD.Print($"FUSED BACKGROUND: {artData.background_prompt}");
+			GD.Print($"FUSED PLAYER: {artData.player_visual}");
+			GD.Print($"FUSED PLATFORM: {artData.platform_visual}");
+
+			// Same texture generation flow as regular generation
+			GD.Print("generating fused player sprite...");
+			Texture2D playerTexture = await GenerateTexture(artData.player_visual, true, false);
+			if (playerTexture != null) ApplyTextureToPlayer(playerTexture);
+			else GD.PushError("Fused player texture generation failed. Skipping!");
+			
+
+			GD.Print("generating fused background...");
+			Texture2D backgroundTexture = await GenerateTexture(artData.background_prompt, false, false);
+
+			if (backgroundTexture != null) ApplyTextureToBackground(backgroundTexture);
+
+			GD.Print("generating fused platform...");
+			string platformPrompt = !string.IsNullOrEmpty(artData.platform_visual) 
+				? artData.platform_visual 
+				: "Ground texture blending " + Culture1LineEdit.Text + " and " + Culture2LineEdit.Text;
+			
+			Texture2D platformTexture = await GenerateTexture(platformPrompt, false, true);
+			if (platformTexture != null) ApplyTextureToPlatform(platformTexture);
+
+			GD.Print("FUSION pipeline done!");
+		}
+		catch (Exception e)
+		{
+			GD.PushError("FUSION pipeline ERROR: " + e.Message);
+		}
+		finally
+		{
+			PlayButton.Disabled = false;
+		}
+	}
+
+
+	private async Task<ArtDescriptionResponse> GetFusionArtDirectionFromGemini(
+		String userDescription, String culture1, String culture2)
+		{
+			// System prompt for fusion
+			String systemPrompt = @"
             You are the lead tech artist for a 2D side-scrolling platformer game.
             Your job is to FUSE TWO CULTURES into a HYBRID visual style, then convert the user's idea 
             into three short PROMPTS for an image generator: one for the BACKGROUND, one for the PLAYER, and one for the PLATFORM.
@@ -428,7 +428,7 @@ public partial class MainInterface : Control
             - Use a consistent FUSED art style, colour palette and lighting across BACKGROUND, PLAYER and PLATFORM.
             - The fusion must be visible in ALL three outputs, not just one.
 
-            2) BACKGROUND (""background_prompt"")
+			2) BACKGROUND (""background_prompt"")
             - Goal: the main side-view environment layer FUSING architectural elements from BOTH cultures.
             - Examples of fusion:
             - Japanese torii gates with Moroccan zellige tile patterns.
@@ -464,7 +464,7 @@ public partial class MainInterface : Control
             - DO NOT include any text, numbers, or UI elements in the background.
             - 不要在背景图中画任何文字、数字、百分比或标注。
 
-            3) PLAYER (""player_visual"")
+			3) PLAYER (""player_visual"")
             - Goal: a 2-row SIDE-VIEW CHARACTER SPRITESHEET for a platformer.
             - Style: pixel-art-inspired or sharp cel-style 2D:
             - clear outline, strong readable silhouette, limited but harmonious colour palette.
@@ -497,7 +497,7 @@ public partial class MainInterface : Control
             - 不要写任何文字、标题、标签或水印。
             - 不要在一个格子里画多个人物。
 
-            4) PLATFORM (""platform_visual"")
+			4) PLATFORM (""platform_visual"")
             - Goal: a ground material texture FUSING patterns/materials from BOTH cultures.
             - Fusion examples:
             - Tatami weave texture with Persian geometric border motifs blended in.
@@ -511,468 +511,468 @@ public partial class MainInterface : Control
             - clear but simple tonal blocks, not noisy realism.
             - Very low contrast, soft mottled detail; the ground should not draw more attention than the player.
             - Avoid: overly busy patterns, high-contrast mosaics, decorative borders that look like walls.
-            - Useful phrases to include: ""seamless texture"", ""ground tile"", ""top-down view"",
-            ""flat lighting"", ""soft irregular mottled surface"", ""subtle variation"", ""walkable ground"",
-            ""blended cultural patterns"", ""harmonised fusion aesthetic"".
+			- Useful phrases to include: ""seamless texture"", ""ground tile"", ""top-down view"",
+			""flat lighting"", ""soft irregular mottled surface"", ""subtle variation"", ""walkable ground"",
+			""blended cultural patterns"", ""harmonised fusion aesthetic"".
 
             OUTPUT FORMAT:
             Return ONLY a single valid JSON object. Do not add explanations, comments, or markdown fences.
             The JSON must have exactly this structure:
 
             {
-            ""background_prompt"": ""..."",
-            ""player_visual"": ""..."",
-            ""platform_visual"": ""...""
+			""background_prompt"": ""..."",
+			""player_visual"": ""..."",
+			""platform_visual"": ""...""
             }
-            ";
+			";
 
-            // User prompt for fusion
-            String userPrompt =
-            $"User idea: {userDescription}. " +
-            $"Culture 1: {culture1}. " +
-            $"Culture 2: {culture2}. " +
-            "Create a FUSION that harmoniously blends visual elements from BOTH cultures into a unified hybrid aesthetic. " +
-            "The background should mix architectural elements, the player should wear fused costume pieces, " +
-            "and the platform should blend ground textures/patterns from both traditions. " +
-            "Use the structure of classic 2D platformer scenes: a side-view environment band behind a ground line, " +
-            "with mid-distance fused facades or landscape in the middle of the image and a clear sky band above. " +
-            "The style should be sharp pixel-art-inspired 2D game art, with no blur. " +
-            "The player output is a small side-view spritesheet on pure white, and the platform is a top-down seamless ground tile. " +
-            "Follow the system rules exactly and respond with JSON only.";
+			// User prompt for fusion
+			String userPrompt =
+			$"User idea: {userDescription}. " +
+			$"Culture 1: {culture1}. " +
+			$"Culture 2: {culture2}. " +
+			"Create a FUSION that harmoniously blends visual elements from BOTH cultures into a unified hybrid aesthetic. " +
+			"The background should mix architectural elements, the player should wear fused costume pieces, " +
+			"and the platform should blend ground textures/patterns from both traditions. " +
+			"Use the structure of classic 2D platformer scenes: a side-view environment band behind a ground line, " +
+			"with mid-distance fused facades or landscape in the middle of the image and a clear sky band above. " +
+			"The style should be sharp pixel-art-inspired 2D game art, with no blur. " +
+			"The player output is a small side-view spritesheet on pure white, and the platform is a top-down seamless ground tile. " +
+			"Follow the system rules exactly and respond with JSON only.";
 
-            var requestBody = new
-            {
-                system_instruction = new
-                {
-                    parts = new[] { new { text = systemPrompt } }
-                },
-                contents = new[]
-                {
-                    new
-                    {
-                        role = "user",
-                        parts = new[] { new { text = userPrompt } }
-                    }
-                },
-                generationConfig = new
-                {
-                    response_mime_type = "application/json"
-                }
-            };
+			var requestBody = new
+			{
+				system_instruction = new
+				{
+					parts = new[] { new { text = systemPrompt } }
+				},
+				contents = new[]
+				{
+					new
+					{
+						role = "user",
+						parts = new[] { new { text = userPrompt } }
+					}
+				},
+				generationConfig = new
+				{
+					response_mime_type = "application/json"
+				}
+			};
 
-            String jsonResponse = await PostGeminiRequest(GeminiTextUrl, JsonSerializer.Serialize(requestBody));
+			String jsonResponse = await PostGeminiRequest(GeminiTextUrl, JsonSerializer.Serialize(requestBody));
 
-            if (string.IsNullOrEmpty(jsonResponse)) return null;
+			if (string.IsNullOrEmpty(jsonResponse)) return null;
 
-            using JsonDocument doc = JsonDocument.Parse(jsonResponse);
-            string contentString = doc.RootElement
-                .GetProperty("candidates")[0]
-                .GetProperty("content")
-                .GetProperty("parts")[0]
-                .GetProperty("text")
-                .GetString();
-
-
-            if (string.IsNullOrWhiteSpace(contentString))
-            {
-                GD.PushError("Fusion text generation: 'content' field was null or empty.");
-                return null;
-            }
-
-            contentString = contentString
-                .Replace("```json", string.Empty)
-                .Replace("```", string.Empty)
-                .Trim();
-
-            return JsonSerializer.Deserialize<ArtDescriptionResponse>(contentString);
-        }
+			using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+			string contentString = doc.RootElement
+				.GetProperty("candidates")[0]
+				.GetProperty("content")
+				.GetProperty("parts")[0]
+				.GetProperty("text")
+				.GetString();
 
 
-    // image generation
-    // image generation - Google Gemini API
-    private async Task<Texture2D> GenerateTexture(String prompt, bool isCharacter, bool isPlatform)
-    {
-        if (isCharacter)
-        {
-            prompt +=
-                "\n\n=== STRICT SPRITESHEET REQUIREMENTS ===\n" +
-                
-                "OUTPUT FORMAT:\n" +
-                "- A single image containing a 2-row character spritesheet grid.\n" +
-                "- Background MUST be pure solid White (#FFFFFF), no gradients, no patterns.\n" +
-                "- NO text, NO labels, NO titles, NO watermarks anywhere.\n" +
-                "- NO borders, NO frames, NO boxes around the characters.\n" +
-                "- NO rectangular outlines around each sprite.\n" +
-                "- DO NOT draw grid lines or cell borders.\n" +
-                "- ONLY the character sprites on pure white, nothing else.\n" +
-                "- 不要在角色周围画边框、方框或网格线。\n" +
-                
-                "\nGRID STRUCTURE:\n" +
-                "- Row 1 (Top): EXACTLY 4 idle frames, evenly spaced.\n" +
-                "- Row 2 (Bottom): EXACTLY 6 run frames, evenly spaced.\n" +
-                "- Characters float on white background with NO visible borders.\n" +
-                "- The grid is INVISIBLE - only the characters are drawn.\n" +
-                
-                "\nROW 1 - IDLE (4 frames):\n" +
-                "- All 4 frames: EXACT SAME CHARACTER, EXACT SAME POSE.\n" +
-                "- Standing still, facing RIGHT, full body visible.\n" +
-                "- Make all 4 frames IDENTICAL if unsure.\n" +
-                "- 待机帧必须完全相同。\n" +
-                
-                "\nROW 2 - RUN CYCLE (6 frames):\n" +
-                "- Smooth 6-frame running animation loop.\n" +
-                "- Character runs facing RIGHT, full body visible.\n" +
-                "- Same character design in all frames.\n" +
-                
-                "\nFORBIDDEN - DO NOT INCLUDE:\n" +
-                "- Any text or labels\n" +
-                "- Any borders or frames around sprites\n" +
-                "- Any grid lines or cell outlines\n" +
-                "- Any UI elements or annotations\n" +
-                "- Any boxes, rectangles, or decorative frames\n" +
-                "- 禁止：文字、边框、网格线、方框、标注";
-        }
-        
-        // Aspect ratio for Gemini
-        var aspectRatio = isCharacter ? "16:9" : isPlatform ? "1:1" : "21:9";
+			if (string.IsNullOrWhiteSpace(contentString))
+			{
+				GD.PushError("Fusion text generation: 'content' field was null or empty.");
+				return null;
+			}
 
-        // Google Gemini 3 Pro Image API format
-        var requestBody = new
-        {
-            contents = new[]
-            {
-                new
-                {
-                    parts = new[] { new { text = prompt } }
-                }
-            },
-            generationConfig = new
-            {
-                response_modalities = new[] { "TEXT", "IMAGE" }
-            }
-        };
+			contentString = contentString
+				.Replace("```json", string.Empty)
+				.Replace("```", string.Empty)
+				.Trim();
 
-        String jsonResponse = await PostGeminiRequest(GeminiImageUrl, JsonSerializer.Serialize(requestBody));
-
-        if (String.IsNullOrEmpty(jsonResponse))
-        {
-            GD.PushError("Image generation: API returned null.");
-            return null;
-        }
-
-        // Parse response and extract base64 image
-        using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
-        {
-            var candidates = doc.RootElement.GetProperty("candidates");
-            if (candidates.GetArrayLength() == 0)
-            {
-                GD.PushError("Image generation: No candidates returned.");
-                return null;
-            }
-
-            var parts = candidates[0].GetProperty("content").GetProperty("parts");
-            
-            // Look for inline_data (base64 image)
-            foreach (var part in parts.EnumerateArray())
-            {
-                if (part.TryGetProperty("inlineData", out JsonElement inlineData))
-                {
-                    string mimeType = inlineData.GetProperty("mimeType").GetString();
-                    string base64Data = inlineData.GetProperty("data").GetString();
-                    
-                    GD.Print($"Image received: {mimeType}");
-                    
-                    // Convert base64 to texture
-                    byte[] imageBytes = Convert.FromBase64String(base64Data);
-                    Image img = new Image();
-                    Error err;
-                    
-                    if (mimeType.Contains("png"))
-                    {
-                        err = img.LoadPngFromBuffer(imageBytes);
-                    }
-                    else
-                    {
-                        err = img.LoadJpgFromBuffer(imageBytes);
-                    }
-
-                    if (err == Error.Ok)
-                    {
-                        return ImageTexture.CreateFromImage(img);
-                    }
-                    else
-                    {
-                        GD.PushError($"Failed to load image from buffer: {err}");
-                        return null;
-                    }
-                }
-                else if (part.TryGetProperty("text", out JsonElement textElement))
-                {
-                    // Model returned text instead of image (possibly refused)
-                    string text = textElement.GetString();
-                    GD.PushWarning($"Gemini returned text instead of image: {text}");
-                }
-            }
-            
-            GD.PushError("Image generation: No image data found in response.");
-            return null;
-        }
-    }
+			return JsonSerializer.Deserialize<ArtDescriptionResponse>(contentString);
+		}
 
 
-    // Helper: Send HTTP Request to Google Gemini API
-    private async Task<String> PostGeminiRequest(String url, String jsonBody)
-    {
-        HttpRequest request = new HttpRequest();
-        AddChild(request);
-    
-        try 
-        {
-            // Google Gemini uses x-goog-api-key header
-            String[] headers = [
-                "Content-Type: application/json",
-                $"x-goog-api-key: {APIKey}"
-            ];
+	// image generation
+	// image generation - Google Gemini API
+	private async Task<Texture2D> GenerateTexture(String prompt, bool isCharacter, bool isPlatform)
+	{
+		if (isCharacter)
+		{
+			prompt +=
+				"\n\n=== STRICT SPRITESHEET REQUIREMENTS ===\n" +
+				
+				"OUTPUT FORMAT:\n" +
+				"- A single image containing a 2-row character spritesheet grid.\n" +
+				"- Background MUST be pure solid White (#FFFFFF), no gradients, no patterns.\n" +
+				"- NO text, NO labels, NO titles, NO watermarks anywhere.\n" +
+				"- NO borders, NO frames, NO boxes around the characters.\n" +
+				"- NO rectangular outlines around each sprite.\n" +
+				"- DO NOT draw grid lines or cell borders.\n" +
+				"- ONLY the character sprites on pure white, nothing else.\n" +
+				"- 不要在角色周围画边框、方框或网格线。\n" +
+				
+				"\nGRID STRUCTURE:\n" +
+				"- Row 1 (Top): EXACTLY 4 idle frames, evenly spaced.\n" +
+				"- Row 2 (Bottom): EXACTLY 6 run frames, evenly spaced.\n" +
+				"- Characters float on white background with NO visible borders.\n" +
+				"- The grid is INVISIBLE - only the characters are drawn.\n" +
+				
+				"\nROW 1 - IDLE (4 frames):\n" +
+				"- All 4 frames: EXACT SAME CHARACTER, EXACT SAME POSE.\n" +
+				"- Standing still, facing RIGHT, full body visible.\n" +
+				"- Make all 4 frames IDENTICAL if unsure.\n" +
+				"- 待机帧必须完全相同。\n" +
+				
+				"\nROW 2 - RUN CYCLE (6 frames):\n" +
+				"- Smooth 6-frame running animation loop.\n" +
+				"- Character runs facing RIGHT, full body visible.\n" +
+				"- Same character design in all frames.\n" +
+				
+				"\nFORBIDDEN - DO NOT INCLUDE:\n" +
+				"- Any text or labels\n" +
+				"- Any borders or frames around sprites\n" +
+				"- Any grid lines or cell outlines\n" +
+				"- Any UI elements or annotations\n" +
+				"- Any boxes, rectangles, or decorative frames\n" +
+				"- 禁止：文字、边框、网格线、方框、标注";
+		}
+		
+		// Aspect ratio for Gemini
+		var aspectRatio = isCharacter ? "16:9" : isPlatform ? "1:1" : "21:9";
 
-            Error err = request.Request(url, headers, HttpClient.Method.Post, jsonBody);
-        
-            if (err != Error.Ok)
-            {
-                GD.PushError($"Godot Connection Error: {err}");
-                return null;
-            }
+		// Google Gemini 3 Pro Image API format
+		var requestBody = new
+		{
+			contents = new[]
+			{
+				new
+				{
+					parts = new[] { new { text = prompt } }
+				}
+			},
+			generationConfig = new
+			{
+				response_modalities = new[] { "TEXT", "IMAGE" }
+			}
+		};
 
-            var result = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);
-        
-            long responseCode = (long)result[1];
-            byte[] body = (byte[])result[3];
+		String jsonResponse = await PostGeminiRequest(GeminiImageUrl, JsonSerializer.Serialize(requestBody));
 
-            if (responseCode == 200)
-            {
-                return System.Text.Encoding.UTF8.GetString(body);
-            }
-            else
-            {
-                String errorMsg = System.Text.Encoding.UTF8.GetString(body);
-                GD.PushError($"Gemini API Error (Code {responseCode}): {errorMsg}");
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            GD.PushError($"Request Exception: {e.Message}");
-            return null;
-        }
-        finally
-        {
-            request.QueueFree();
-        }
-    }
+		if (String.IsNullOrEmpty(jsonResponse))
+		{
+			GD.PushError("Image generation: API returned null.");
+			return null;
+		}
 
+		// Parse response and extract base64 image
+		using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
+		{
+			var candidates = doc.RootElement.GetProperty("candidates");
+			if (candidates.GetArrayLength() == 0)
+			{
+				GD.PushError("Image generation: No candidates returned.");
+				return null;
+			}
 
-    // modified helper: handle both URLs (https://) and Base64 Data (data:image/...)
-    private async Task<Texture2D> DownloadImage(String imageData)
-    {
-        // CASE 1: AI returned the image directly as Base64 text
-        if (imageData.StartsWith("data:image"))
-        {
-            GD.Print("Image is Base64 encoded. Converting directly...");
-            
-            // strip the header ("data:image/jpeg;base64,")
-            // use char overload to avoid culture-specific warning
-            int commaIndex = imageData.IndexOf(',');
-            if (commaIndex < 0)
-            {
-                GD.PushError("Base64 image data did not contain a comma separator.");
-                return null;
-            }
+			var parts = candidates[0].GetProperty("content").GetProperty("parts");
+			
+			// Look for inline_data (base64 image)
+			foreach (var part in parts.EnumerateArray())
+			{
+				if (part.TryGetProperty("inlineData", out JsonElement inlineData))
+				{
+					string mimeType = inlineData.GetProperty("mimeType").GetString();
+					string base64Data = inlineData.GetProperty("data").GetString();
+					
+					GD.Print($"Image received: {mimeType}");
+					
+					// Convert base64 to texture
+					byte[] imageBytes = Convert.FromBase64String(base64Data);
+					Image img = new Image();
+					Error err;
+					
+					if (mimeType.Contains("png"))
+					{
+						err = img.LoadPngFromBuffer(imageBytes);
+					}
+					else
+					{
+						err = img.LoadJpgFromBuffer(imageBytes);
+					}
 
-            string pureBase64 = imageData.Substring(commaIndex + 1);
-
-            byte[] imageBytes = Convert.FromBase64String(pureBase64);
-            
-            // select the loader based on the header (jpeg or png)
-            Image img = new Image();
-            Error err;
-            
-            if (imageData.Contains("image/png"))
-            {
-                err = img.LoadPngFromBuffer(imageBytes);
-            }
-            else
-            {
-                err = img.LoadJpgFromBuffer(imageBytes);
-            }
-
-            if (err == Error.Ok)
-            {
-                return ImageTexture.CreateFromImage(img);
-            }
-            else 
-            {
-                GD.PushError("Failed to convert Base64 image to Texture.");
-                return null;
-            }
-        }
-
-        // CASE 2: AI returned a web link (https://...) - Use HTTP Request
-        HttpRequest downloader = new HttpRequest();
-        AddChild(downloader);
-
-        Error reqErr = downloader.Request(imageData);
-        if (reqErr != Error.Ok)
-        {
-            GD.PushError(string.Concat("Error: Failed to start image downloading. URL was: ", imageData.AsSpan(0, 20), "..."));
-            downloader.QueueFree();
-            return null;
-        }
-
-        var result = await ToSignal(downloader, HttpRequest.SignalName.RequestCompleted);
-        downloader.QueueFree();
-
-        long respCode = (long)result[1];
-        byte[] body = (byte[])result[3];
-
-        if (respCode == 200)
-        {
-            Image img = new Image();
-            Error loadErr = img.LoadPngFromBuffer(body);
-            if (loadErr != Error.Ok)
-            {
-                loadErr = img.LoadJpgFromBuffer(body);
-            }
-
-            if (loadErr == Error.Ok)
-            {
-                return ImageTexture.CreateFromImage(img);
-            }
-        }
-
-        GD.PushWarning("Image Download Failed! Code: " + respCode.ToString());
-        return null;
-    }
-
-
-    // helper: apply texture to player
-    private void ApplyTextureToPlayer(Texture2D PlayerTexture)
-    {
-        var player = SubViewport.GetNode<Player>("World/Player");
-        player.UpdateVisuals(PlayerTexture);
-    }
-
-    
-    // helper: apply texture to background
-    private void ApplyTextureToBackground(Texture2D BackgroundTexture)
-    {
-        var Background = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DBackgroud/Background");
-        Background.Texture = BackgroundTexture;
-        Background.StretchMode = TextureRect.StretchModeEnum.Scale;
-        Background.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-    }
+					if (err == Error.Ok)
+					{
+						return ImageTexture.CreateFromImage(img);
+					}
+					else
+					{
+						GD.PushError($"Failed to load image from buffer: {err}");
+						return null;
+					}
+				}
+				else if (part.TryGetProperty("text", out JsonElement textElement))
+				{
+					// Model returned text instead of image (possibly refused)
+					string text = textElement.GetString();
+					GD.PushWarning($"Gemini returned text instead of image: {text}");
+				}
+			}
+			
+			GD.PushError("Image generation: No image data found in response.");
+			return null;
+		}
+	}
 
 
-    // helper: apply texture to platform
-    private void ApplyTextureToPlatform(Texture2D PlatformTexture)
-    {
-        // get the raw image data
-        Image img = PlatformTexture.GetImage();
+	// Helper: Send HTTP Request to Google Gemini API
+	private async Task<String> PostGeminiRequest(String url, String jsonBody)
+	{
+		HttpRequest request = new HttpRequest();
+		AddChild(request);
+	
+		try 
+		{
+			// Google Gemini uses x-goog-api-key header
+			String[] headers = [
+				"Content-Type: application/json",
+				$"x-goog-api-key: {APIKey}"
+			];
 
-        // resize it for better tiling
-        img.Resize(256, 256, Image.Interpolation.Lanczos);
-        // create a new smaller texture for tiling
-        ImageTexture tilingTexture = ImageTexture.CreateFromImage(img);
+			Error err = request.Request(url, headers, HttpClient.Method.Post, jsonBody);
+		
+			if (err != Error.Ok)
+			{
+				GD.PushError($"Godot Connection Error: {err}");
+				return null;
+			}
 
-        TextureRect Platform = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DPlatform/Platform");
-        Platform.Texture = tilingTexture;
-        Platform.StretchMode = TextureRect.StretchModeEnum.Tile;
-        Platform.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-    }
+			var result = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);
+		
+			long responseCode = (long)result[1];
+			byte[] body = (byte[])result[3];
 
-
-    private void OnResetPressed()
-    {
-        GD.Print("Resetting scene to blank state...");
-    
-        // Reset player to placeholder
-        var player = SubViewport.GetNode<Player>("World/Player");
-        player.ResetVisuals();  // This method is added in Player.cs
-        
-        // Reset background to white/blank
-        var background = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DBackgroud/Background");
-        background.Texture = null;
-        
-        // Reset platform to white/blank
-        var platform = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DPlatform/Platform");
-        platform.Texture = null;
-        
-        GD.Print("Scene reset complete.");
-    }
-
-
-    private void OnSnapshotPressed()
-    {
-        GD.Print("Taking snapshot...");
-        
-        // Get the viewport texture
-        var viewportTexture = SubViewport.GetTexture();
-        var image = viewportTexture.GetImage();
-        
-        // Create filename with timestamp
-        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"snapshot_{timestamp}.png";
-        
-        var folderPath = "user://SavedScreenshots";
-
-        if (!DirAccess.DirExistsAbsolute(folderPath))
-        {
-            var dir = DirAccess.Open("user://");
-            if (dir != null)
-            {
-                var makedirError = dir.MakeDir("SavedScreenshots");
-                if (makedirError != Error.Ok)
-                {
-                    GD.PushError("Fail to create SaveScreenshots folder");
-                    return;
-                }
-                GD.Print("Created SaveScreenshots folder");
-            }
-            else
-            {
-                GD.PushError("dir not exists!");
-                return;
-            }
-        }
-
-        // Save to user://SavedScreenshots/
-        var savePath = $"{folderPath}/{filename}";
-        var error = image.SavePng(savePath);
-
-        if (error == Error.Ok)
-        {
-            var globalPath = ProjectSettings.GlobalizePath(savePath);
-            GD.Print($"Snapshot saved to: {globalPath}");
-
-            OS.ShellOpen(ProjectSettings.GlobalizePath(folderPath)); // Open the folder in system file explorer
-        }
-        else
-        {
-            GD.PushError($"Failed to save snapshot: {error}");
-        }
-    }
+			if (responseCode == 200)
+			{
+				return System.Text.Encoding.UTF8.GetString(body);
+			}
+			else
+			{
+				String errorMsg = System.Text.Encoding.UTF8.GetString(body);
+				GD.PushError($"Gemini API Error (Code {responseCode}): {errorMsg}");
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			GD.PushError($"Request Exception: {e.Message}");
+			return null;
+		}
+		finally
+		{
+			request.QueueFree();
+		}
+	}
 
 
-    // Helper: Avoid interferring of wasd and space key operation between game runtime screen focus and UI focus
-    private void OnSubViewportGuiInput(InputEvent @event)
-    {
-        if (@event is InputEventMouseButton { Pressed: true })
-        {
-            subViewportFocused = true;
-            // Release focus from any UI element
-            UserDesTextEdit.ReleaseFocus();
-            Culture1LineEdit.ReleaseFocus();
-            Culture2LineEdit.ReleaseFocus();
-        }
-    }
+	// modified helper: handle both URLs (https://) and Base64 Data (data:image/...)
+	private async Task<Texture2D> DownloadImage(String imageData)
+	{
+		// CASE 1: AI returned the image directly as Base64 text
+		if (imageData.StartsWith("data:image"))
+		{
+			GD.Print("Image is Base64 encoded. Converting directly...");
+			
+			// strip the header ("data:image/jpeg;base64,")
+			// use char overload to avoid culture-specific warning
+			int commaIndex = imageData.IndexOf(',');
+			if (commaIndex < 0)
+			{
+				GD.PushError("Base64 image data did not contain a comma separator.");
+				return null;
+			}
+
+			string pureBase64 = imageData.Substring(commaIndex + 1);
+
+			byte[] imageBytes = Convert.FromBase64String(pureBase64);
+			
+			// select the loader based on the header (jpeg or png)
+			Image img = new Image();
+			Error err;
+			
+			if (imageData.Contains("image/png"))
+			{
+				err = img.LoadPngFromBuffer(imageBytes);
+			}
+			else
+			{
+				err = img.LoadJpgFromBuffer(imageBytes);
+			}
+
+			if (err == Error.Ok)
+			{
+				return ImageTexture.CreateFromImage(img);
+			}
+			else 
+			{
+				GD.PushError("Failed to convert Base64 image to Texture.");
+				return null;
+			}
+		}
+
+		// CASE 2: AI returned a web link (https://...) - Use HTTP Request
+		HttpRequest downloader = new HttpRequest();
+		AddChild(downloader);
+
+		Error reqErr = downloader.Request(imageData);
+		if (reqErr != Error.Ok)
+		{
+			GD.PushError(string.Concat("Error: Failed to start image downloading. URL was: ", imageData.AsSpan(0, 20), "..."));
+			downloader.QueueFree();
+			return null;
+		}
+
+		var result = await ToSignal(downloader, HttpRequest.SignalName.RequestCompleted);
+		downloader.QueueFree();
+
+		long respCode = (long)result[1];
+		byte[] body = (byte[])result[3];
+
+		if (respCode == 200)
+		{
+			Image img = new Image();
+			Error loadErr = img.LoadPngFromBuffer(body);
+			if (loadErr != Error.Ok)
+			{
+				loadErr = img.LoadJpgFromBuffer(body);
+			}
+
+			if (loadErr == Error.Ok)
+			{
+				return ImageTexture.CreateFromImage(img);
+			}
+		}
+
+		GD.PushWarning("Image Download Failed! Code: " + respCode.ToString());
+		return null;
+	}
+
+
+	// helper: apply texture to player
+	private void ApplyTextureToPlayer(Texture2D PlayerTexture)
+	{
+		var player = SubViewport.GetNode<Player>("World/Player");
+		player.UpdateVisuals(PlayerTexture);
+	}
+
+	
+	// helper: apply texture to background
+	private void ApplyTextureToBackground(Texture2D BackgroundTexture)
+	{
+		var Background = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DBackgroud/Background");
+		Background.Texture = BackgroundTexture;
+		Background.StretchMode = TextureRect.StretchModeEnum.Scale;
+		Background.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+	}
+
+
+	// helper: apply texture to platform
+	private void ApplyTextureToPlatform(Texture2D PlatformTexture)
+	{
+		// get the raw image data
+		Image img = PlatformTexture.GetImage();
+
+		// resize it for better tiling
+		img.Resize(256, 256, Image.Interpolation.Lanczos);
+		// create a new smaller texture for tiling
+		ImageTexture tilingTexture = ImageTexture.CreateFromImage(img);
+
+		TextureRect Platform = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DPlatform/Platform");
+		Platform.Texture = tilingTexture;
+		Platform.StretchMode = TextureRect.StretchModeEnum.Tile;
+		Platform.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+	}
+
+
+	private void OnResetPressed()
+	{
+		GD.Print("Resetting scene to blank state...");
+	
+		// Reset player to placeholder
+		var player = SubViewport.GetNode<Player>("World/Player");
+		player.ResetVisuals();  // This method is added in Player.cs
+		
+		// Reset background to white/blank
+		var background = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DBackgroud/Background");
+		background.Texture = null;
+		
+		// Reset platform to white/blank
+		var platform = GetNode<TextureRect>(WorldNodePath + "/StaticBody2DPlatform/Platform");
+		platform.Texture = null;
+		
+		GD.Print("Scene reset complete.");
+	}
+
+
+	private void OnSnapshotPressed()
+	{
+		GD.Print("Taking snapshot...");
+		
+		// Get the viewport texture
+		var viewportTexture = SubViewport.GetTexture();
+		var image = viewportTexture.GetImage();
+		
+		// Create filename with timestamp
+		var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+		var filename = $"snapshot_{timestamp}.png";
+		
+		var folderPath = "user://SavedScreenshots";
+
+		if (!DirAccess.DirExistsAbsolute(folderPath))
+		{
+			var dir = DirAccess.Open("user://");
+			if (dir != null)
+			{
+				var makedirError = dir.MakeDir("SavedScreenshots");
+				if (makedirError != Error.Ok)
+				{
+					GD.PushError("Fail to create SaveScreenshots folder");
+					return;
+				}
+				GD.Print("Created SaveScreenshots folder");
+			}
+			else
+			{
+				GD.PushError("dir not exists!");
+				return;
+			}
+		}
+
+		// Save to user://SavedScreenshots/
+		var savePath = $"{folderPath}/{filename}";
+		var error = image.SavePng(savePath);
+
+		if (error == Error.Ok)
+		{
+			var globalPath = ProjectSettings.GlobalizePath(savePath);
+			GD.Print($"Snapshot saved to: {globalPath}");
+
+			OS.ShellOpen(ProjectSettings.GlobalizePath(folderPath)); // Open the folder in system file explorer
+		}
+		else
+		{
+			GD.PushError($"Failed to save snapshot: {error}");
+		}
+	}
+
+
+	// Helper: Avoid interferring of wasd and space key operation between game runtime screen focus and UI focus
+	private void OnSubViewportGuiInput(InputEvent @event)
+	{
+		if (@event is InputEventMouseButton { Pressed: true })
+		{
+			subViewportFocused = true;
+			// Release focus from any UI element
+			UserDesTextEdit.ReleaseFocus();
+			Culture1LineEdit.ReleaseFocus();
+			Culture2LineEdit.ReleaseFocus();
+		}
+	}
 
 }
 
@@ -983,7 +983,7 @@ public partial class MainInterface : Control
 // structure received from Gemini 3 pro (TEXT JSON DATA)
 public class ArtDescriptionResponse
 {
-    public string background_prompt { get; set; }
-    public string player_visual { get; set; }
-    public string platform_visual { get; set; }
+	public string background_prompt { get; set; }
+	public string player_visual { get; set; }
+	public string platform_visual { get; set; }
 }
